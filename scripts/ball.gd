@@ -7,6 +7,7 @@ const START_ANGLE = 45.0
 @onready var ray_cast_right: RayCast2D = $RayCastRight
 @onready var ray_cast_down: RayCast2D = $RayCastDown
 @onready var ray_cast_left: RayCast2D = $RayCastLeft
+@onready var paddle: CharacterBody2D = $"."
 
 func _physics_process(delta: float) -> void:
 	var gameOn = false
@@ -27,6 +28,7 @@ func _physics_process(delta: float) -> void:
 	var angle = get_meta('currentAngle')
 	
 	angle = update_angle_on_collision(angle)
+	speed = update_speed_on_collision_with_paddle(speed)
 	
 	# Once we start moving.
 	var vector = get_direction_from_rota(angle)
@@ -66,8 +68,19 @@ func update_angle_on_collision(angle: float) -> float:
 		set_meta('collision_y_disabled', false)
 	
 	return angle
+
+func update_speed_on_collision_with_paddle(speed: float) -> float:
+	var collider = null
+	if ray_cast_top.is_colliding():
+		collider = ray_cast_top.get_collider()
+	if ray_cast_right.is_colliding():
+		collider = ray_cast_right.get_collider()
+	if ray_cast_down.is_colliding():
+		collider = ray_cast_down.get_collider()
+	if ray_cast_left.is_colliding():
+		collider = ray_cast_left.get_collider()
 	
-	
-	
-	
-	
+	if collider && collider.is_class('CharacterBody2D'):
+		speed += 10
+
+	return speed
