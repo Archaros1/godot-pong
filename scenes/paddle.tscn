@@ -11,10 +11,10 @@ rotation = 1.5708
 script = ExtResource("1_y7wee")
 metadata/playerId = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_3xiby")
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_3xiby")
 region_enabled = true
 region_rect = Rect2(16, 48, 32, 9)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_3xiby")

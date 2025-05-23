@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 
 const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+const COORD_X = 140
 const CONTROL_BY_PLAYER = [
 	[KEY_Z, KEY_S],
 	[KEY_UP, KEY_DOWN],
@@ -18,6 +18,8 @@ func _physics_process(delta: float) -> void:
 		velocity.y = direction * SPEED
 	else:
 		velocity.y = 0
+
+	position.x = set_position_x(playerId)
 
 	move_and_slide()
 
@@ -47,3 +49,9 @@ func set_direction(playerId: int) -> int:
 		set_meta('directionLocked', true)
 
 	return direction
+
+func set_position_x(playerId: int) -> float:
+	if playerId == 0:
+		return -1 * COORD_X
+	else:
+		return COORD_X

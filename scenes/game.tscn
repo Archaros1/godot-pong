@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=4 uid="uid://njd2uklsekft"]
+[gd_scene load_steps=7 format=4 uid="uid://njd2uklsekft"]
 
 [ext_resource type="PackedScene" uid="uid://drm6uhvaa84mc" path="res://scenes/paddle.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://d35hsgddy3rby" path="res://assets/sprites/world_tileset.png" id="2_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://dew6u6on3ngyy" path="res://scenes/ball.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://dddadrqwetsay" path="res://scenes/goal.tscn" id="4_lbhrr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -136,14 +138,25 @@ sources/0 = SubResource("TileSetAtlasSource_lnu2h")
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(3, 3)
 
-[node name="paddle" parent="." instance=ExtResource("1_uwrxv")]
-position = Vector2(-140, -30)
-
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray("AAD0//n/AAAAAAEAAAD1//n/AAAAAAEAAAD2//n/AAAAAAEAAAD3//n/AAAAAAEAAAD4//n/AAAAAAEAAAD5//n/AAAAAAEAAAD6//n/AAAAAAEAAAD7//n/AAAAAAEAAAD8//n/AAAAAAEAAAD9//n/AAAAAAEAAAD+//n/AAAAAAEAAAD///n/AAAAAAEAAAAAAPn/AAAAAAEAAAABAPn/AAAAAAEAAAACAPn/AAAAAAEAAAADAPn/AAAAAAEAAAAEAPn/AAAAAAEAAAAFAPn/AAAAAAEAAAAGAPn/AAAAAAEAAAAHAPn/AAAAAAEAAAAIAPn/AAAAAAEAAAAJAPn/AAAAAAEAAAAKAPn/AAAAAAEAAAALAPn/AAAAAAEAAAD0/wYAAAAAAAEAAAD1/wYAAAAAAAEAAAD2/wYAAAAAAAEAAAD3/wYAAAAAAAEAAAD4/wYAAAAAAAEAAAD5/wYAAAAAAAEAAAD6/wYAAAAAAAEAAAD7/wYAAAAAAAEAAAD8/wYAAAAAAAEAAAD9/wYAAAAAAAEAAAD+/wYAAAAAAAEAAAD//wYAAAAAAAEAAAAAAAYAAAAAAAEAAAABAAYAAAAAAAEAAAACAAYAAAAAAAEAAAADAAYAAAAAAAEAAAAEAAYAAAAAAAEAAAAFAAYAAAAAAAEAAAAGAAYAAAAAAAEAAAAHAAYAAAAAAAEAAAAIAAYAAAAAAAEAAAAJAAYAAAAAAAEAAAAKAAYAAAAAAAEAAAALAAYAAAAAAAEAAAA=")
 tile_set = SubResource("TileSet_lbhrr")
+
+[node name="paddle" parent="." instance=ExtResource("1_uwrxv")]
+position = Vector2(-140, -30)
 
 [node name="paddle2" parent="." instance=ExtResource("1_uwrxv")]
 position = Vector2(140, 30)
 rotation = -1.5708
 metadata/playerId = 1
+
+[node name="goal" parent="." instance=ExtResource("4_lbhrr")]
+position = Vector2(-192, 0)
+rotation = 1.5708
+metadata/playerId = 1
+
+[node name="goal2" parent="." instance=ExtResource("4_lbhrr")]
+position = Vector2(192, 0)
+rotation = -1.5708
+
+[node name="ball" parent="." instance=ExtResource("3_lnu2h")]
