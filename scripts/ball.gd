@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 const START_SPEED = 100.0
 const START_ANGLE = 45.0
+const MAX_DEFLECTION = 45.0
 @onready var ray_cast_top: RayCast2D = $RayCastTop
 @onready var ray_cast_right: RayCast2D = $RayCastRight
 @onready var ray_cast_down: RayCast2D = $RayCastDown
@@ -36,7 +37,7 @@ func _physics_process(_delta: float) -> void:
 	
 	var collider = get_collider()
 	
-	angle = update_angle_on_collision(angle)
+	angle = update_angle_on_collision(angle, collider)
 	speed = update_speed_on_collision_with_paddle(speed, collider)
 	
 	# Once we start moving.
@@ -52,7 +53,7 @@ func _physics_process(_delta: float) -> void:
 func get_direction_from_rota(angle: float) -> Dictionary:
 	return {'x': cos(deg_to_rad(angle)), 'y': sin(deg_to_rad(angle))}
 
-func update_angle_on_collision(angle: float) -> float:
+func update_angle_on_collision(angle: float, collider: Object) -> float:
 	var collision_x_disabled = false
 	var collision_y_disabled = false
 	
@@ -65,7 +66,8 @@ func update_angle_on_collision(angle: float) -> float:
 	# If collision enabled & colliding.
 	if !collision_x_disabled && (ray_cast_right.is_colliding() || ray_cast_left.is_colliding()):
 		set_meta('collision_x_disabled', true)
-		angle = 180 - angle
+		var collider_height = collider.find_child('CollisionShape2D').shape.get_size()[0];
+		angle = adjust_ball_angle_on_paddle_hit(angle, position.y, collider.position.y, collider_height)
 	if !collision_y_disabled && (ray_cast_top.is_colliding() || ray_cast_down.is_colliding()):
 		set_meta('collision_y_disabled', true)
 		angle *= -1
@@ -103,3 +105,20 @@ func get_collider():
 	if ray_cast_left.is_colliding():
 		collider = ray_cast_left.get_collider()
 	return collider
+
+func adjust_ball_angle_on_paddle_hit(
+	angle: float,
+	ball_y: float,
+	paddle_center_y: float,
+	paddle_size: float
+) -> float:
+	# How far from center the hit was, normalized between -1 and 1
+	var relative_y = (ball_y - paddle_center_y) / (paddle_size / 2)
+	relative_y = max(-1, min(1, relative_y))
+	
+	# Compute deflection based on hit position
+	var deflection = relative_y * MAX_DEFLECTION
+	var reflected_angle = fmod(180 - angle, 360)
+	var newAngle = fmod(reflected_angle + deflection, 360)
+	
+	return newAngle

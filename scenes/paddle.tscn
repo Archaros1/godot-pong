@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bgixt8oanbarb" path="res://scripts/paddle.gd" id="1_y7wee"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3xiby"]
-size = Vector2(32, 8)
+size = Vector2(32, 3)
 
 [node name="paddle" type="CharacterBody2D"]
 rotation = 1.5708
@@ -17,4 +17,5 @@ region_enabled = true
 region_rect = Rect2(16, 48, 32, 9)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2.5)
 shape = SubResource("RectangleShape2D_3xiby")
