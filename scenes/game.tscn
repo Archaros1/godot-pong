@@ -155,12 +155,12 @@ metadata/playerId = 1
 [node name="ball" parent="." instance=ExtResource("3_lnu2h")]
 
 [node name="goal" parent="." instance=ExtResource("4_lbhrr")]
-position = Vector2(-192, 1)
+position = Vector2(-192, 0)
 rotation = 1.5708
 metadata/playerId = 1
 
 [node name="goal2" parent="." instance=ExtResource("4_lbhrr")]
-position = Vector2(192, 1)
+position = Vector2(192, 0)
 rotation = -1.5708
 
 [node name="score" parent="." instance=ExtResource("5_iywne")]

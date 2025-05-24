@@ -21,11 +21,7 @@ func _on_body_entered(body: Node2D) -> void:
 func reset_ball(goalerId: int = 0) -> void:
 	ball.set_meta("gameOn", false)
 	ball.position = Vector2(0, 0)
-	var rng = RandomNumberGenerator.new()
-	var new_angle = rng.randf_range(-45, 45)
-	if goalerId == 1:
-		new_angle += 180
-	ball.set_meta("currentAngle", new_angle)
+	ball.randomizeAngle(goalerId)
 	
 	
 	
