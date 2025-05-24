@@ -8,6 +8,7 @@ const START_ANGLE = 45.0
 @onready var ray_cast_down: RayCast2D = $RayCastDown
 @onready var ray_cast_left: RayCast2D = $RayCastLeft
 @onready var paddle: CharacterBody2D = $"."
+@onready var game: Node2D = $".."
 
 func _physics_process(delta: float) -> void:
 	var gameOn = false
@@ -15,13 +16,15 @@ func _physics_process(delta: float) -> void:
 	# Start moving only after ui_accept.
 	if Input.is_action_just_pressed("ui_accept"):
 		set_meta('gameOn', true)
+		game.set_meta("started", true)
 	
 	if has_meta('gameOn'):
 		gameOn = get_meta('gameOn')
 	
 	if !gameOn:
 		set_meta('currentSpeed', START_SPEED)
-		set_meta('currentAngle', START_ANGLE)
+		if !game.get_meta('started'):
+			set_meta('currentAngle', START_ANGLE)
 		return
 	
 	var speed = get_meta('currentSpeed')

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bhttssrvs6p4n"]
+
+[node name="score" type="RichTextLabel"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "0"
+horizontal_alignment = 2
+metadata/playerId = 0
