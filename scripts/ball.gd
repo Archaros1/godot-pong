@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 
 const START_SPEED = 100.0
-const START_ANGLE = 45.0
+const START_ANGLE = 0
 const MAX_DEFLECTION = 45.0
 @onready var ray_cast_top: RayCast2D = $RayCastTop
 @onready var ray_cast_right: RayCast2D = $RayCastRight
@@ -67,7 +67,7 @@ func update_angle_on_collision(angle: float, collider: Object) -> float:
 	if !collision_x_disabled && (ray_cast_right.is_colliding() || ray_cast_left.is_colliding()):
 		set_meta('collision_x_disabled', true)
 		var collider_height = collider.find_child('CollisionShape2D').shape.get_size()[0];
-		angle = adjust_ball_angle_on_paddle_hit(angle, position.y, collider.position.y, collider_height)
+		angle = adjust_ball_angle_on_paddle_hit(angle, position.y, collider)
 	if !collision_y_disabled && (ray_cast_top.is_colliding() || ray_cast_down.is_colliding()):
 		set_meta('collision_y_disabled', true)
 		angle *= -1
@@ -109,15 +109,19 @@ func get_collider():
 func adjust_ball_angle_on_paddle_hit(
 	angle: float,
 	ball_y: float,
-	paddle_center_y: float,
-	paddle_size: float
+	paddle: Node2D
 ) -> float:
+	var paddle_center_y = paddle.position.y
+	var paddle_size = paddle.find_child('CollisionShape2D').shape.get_size()[0];
 	# How far from center the hit was, normalized between -1 and 1
 	var relative_y = (ball_y - paddle_center_y) / (paddle_size / 2)
 	relative_y = max(-1, min(1, relative_y))
 	
+	
 	# Compute deflection based on hit position
 	var deflection = relative_y * MAX_DEFLECTION
+	if position.x < paddle.position.x:
+		deflection *= -1
 	var reflected_angle = fmod(180 - angle, 360)
 	var newAngle = fmod(reflected_angle + deflection, 360)
 	
