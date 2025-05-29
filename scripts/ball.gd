@@ -12,6 +12,12 @@ const MAX_DEFLECTION = 45.0
 @onready var paddle: CharacterBody2D = $"../paddle"
 @onready var paddle_2: CharacterBody2D = $"../paddle2"
 var rng = RandomNumberGenerator.new()
+const PARTICLE_FROM_COLLISION_DIRECTION = {
+	'top': [0, 1],
+	'down': [0, -1],
+	'left': [1, 0],
+	'right': [-1, 0],
+}
 
 func _physics_process(_delta: float) -> void:
 	var gameOn = false
@@ -36,6 +42,15 @@ func _physics_process(_delta: float) -> void:
 	var angle = get_meta('currentAngle')
 	
 	var collider = get_collider()
+	var collision_direction = collider.direction
+	collider = collider.object
+	
+	if collider:
+		$CPUParticles.direction = Vector2(
+			PARTICLE_FROM_COLLISION_DIRECTION[collision_direction][0],
+			PARTICLE_FROM_COLLISION_DIRECTION[collision_direction][1]
+		)
+		$CPUParticles.emitting = true
 	
 	angle = update_angle_on_collision(angle, collider)
 	speed = update_speed_on_collision_with_paddle(speed, collider)
@@ -66,8 +81,8 @@ func update_angle_on_collision(angle: float, collider: Object) -> float:
 	# If collision enabled & colliding.
 	if !collision_x_disabled && (ray_cast_right.is_colliding() || ray_cast_left.is_colliding()):
 		set_meta('collision_x_disabled', true)
-		var collider_height = collider.find_child('CollisionShape2D').shape.get_size()[0];
-		angle = adjust_ball_angle_on_paddle_hit(angle, position.y, collider)
+		if collider:
+			angle = adjust_ball_angle_on_paddle_hit(angle, position.y, collider)
 	if !collision_y_disabled && (ray_cast_top.is_colliding() || ray_cast_down.is_colliding()):
 		set_meta('collision_y_disabled', true)
 		angle *= -1
@@ -94,17 +109,22 @@ func randomizeAngle(goalerId: int = 0) -> float:
 	
 	return new_angle
 
-func get_collider():
+func get_collider() -> Dictionary:
 	var collider = null
+	var direction = null
 	if ray_cast_top.is_colliding():
 		collider = ray_cast_top.get_collider()
+		direction = 'top'
 	if ray_cast_right.is_colliding():
 		collider = ray_cast_right.get_collider()
+		direction = 'right'
 	if ray_cast_down.is_colliding():
 		collider = ray_cast_down.get_collider()
+		direction = 'down'
 	if ray_cast_left.is_colliding():
 		collider = ray_cast_left.get_collider()
-	return collider
+		direction = 'left'
+	return {'object': collider, 'direction': direction}
 
 func adjust_ball_angle_on_paddle_hit(
 	angle: float,
